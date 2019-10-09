@@ -7,11 +7,11 @@ class WordFrequencyCounterAcceptance extends FlatSpec with Matchers with TableDr
 
   private val words = Table(
     ("filename", "wordFrequency"),
-    ("test.txt", Map(
-      "acquaintance" -> 1,
-      "suppose" -> 1,
-      "sure" -> 1,
-      "know" -> 1)),
+//    ("test.txt", Map(
+//      "acquaintance" -> 1,
+//      "suppose" -> 1,
+//      "sure" -> 1,
+//      "know" -> 1)),
     ("input.txt", Map(
       "white" -> 1,
       "tigers" -> 1,
@@ -49,10 +49,8 @@ class WordFrequencyCounterAcceptance extends FlatSpec with Matchers with TableDr
       "time" -> 203)))
 
   "Word frequency counter" should "find the top 25 most used words in a file" in {
-    val wordFrequencyCounter = new WordFrequencyCounter
-
     forAll(words) { (filename, wordFrequency) =>
-      wordFrequencyCounter.frequency(filename) should contain only (wordFrequency)
+      WordFrequencyCounter.wordFrequencyIn(filename) should contain only wordFrequency
     }
   }
 
