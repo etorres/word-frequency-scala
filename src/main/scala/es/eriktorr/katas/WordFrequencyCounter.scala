@@ -4,6 +4,7 @@ import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
 
 import scala.jdk.StreamConverters._
+import scala.util.matching.Regex
 import scala.util.{Failure, Success, Try}
 
 object WordFrequencyCounter {
@@ -16,6 +17,8 @@ object WordFrequencyCounter {
   type Words = LazyList[String]
 
   type WordFrequency = Map[String, Int]
+
+  private val charactersPattern: Regex = "[\",;.]".r
 
   val pathTo: FileName => FilePath = (fileName: FileName) => Try(getClass.getClassLoader.getResource(fileName).getPath) match {
     case Success(resourceUri) => resourceUri.asInstanceOf[FilePath]
@@ -31,6 +34,7 @@ object WordFrequencyCounter {
     _.map(_.split("\\s+"))
       .filter(_.nonEmpty)
       .flatten
+      .map(charactersPattern.replaceAllIn(_, ""))
       .map(_.toLowerCase())
   }
 
