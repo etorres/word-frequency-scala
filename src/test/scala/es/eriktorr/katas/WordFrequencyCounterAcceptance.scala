@@ -1,17 +1,20 @@
 package es.eriktorr.katas
 
+import es.eriktorr.katas.WordFrequencyCounter.{FileName, FilePath, StopWords}
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.{FlatSpec, Matchers}
+
+import scala.io.Source
 
 class WordFrequencyCounterAcceptance extends FlatSpec with Matchers with TableDrivenPropertyChecks {
 
   private val words = Table(
     ("filename", "wordFrequency"),
-//    ("test.txt", Map(
-//      "acquaintance" -> 1,
-//      "suppose" -> 1,
-//      "sure" -> 1,
-//      "know" -> 1)),
+    //    ("test.txt", Map(
+    //      "acquaintance" -> 1,
+    //      "suppose" -> 1,
+    //      "sure" -> 1,
+    //      "know" -> 1)),
     ("input.txt", Map(
       "white" -> 1,
       "tigers" -> 1,
@@ -48,9 +51,25 @@ class WordFrequencyCounterAcceptance extends FlatSpec with Matchers with TableDr
       "good" -> 201,
       "time" -> 203)))
 
+  private val pathToStopWords: FileName => FilePath = {
+    getClass.getClassLoader.getResource(_).getPath
+  }
+
+  private val readStopWords: String => StopWords = (fileName: String) => {
+    val source = Source.fromFile(fileName)
+    val stopWords = source.getLines
+      .flatMap((line: String) => line.split(","))
+      .filter(_.nonEmpty)
+      .toList
+    source.close()
+    stopWords
+  }
+
+  private val stopWords = pathToStopWords andThen readStopWords apply "stop_words.txt"
+
   "Word frequency counter" should "find the top 25 most used words in a file" in {
     forAll(words) { (filename, wordFrequency) =>
-      WordFrequencyCounter.wordFrequencyIn(filename) should contain only wordFrequency
+      WordFrequencyCounter.wordFrequencyIn(filename, stopWords) should contain only wordFrequency
     }
   }
 
