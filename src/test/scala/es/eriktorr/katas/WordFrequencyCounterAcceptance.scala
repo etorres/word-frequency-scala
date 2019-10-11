@@ -70,7 +70,14 @@ class WordFrequencyCounterAcceptance extends FlatSpec with Matchers with TableDr
 
   "Word frequency counter" should "find the top 25 most used words in a file" in {
     forAll(words) { (filename, wordFrequency) =>
-      WordFrequencyCounter.wordFrequencyIn(filename, stopWords) shouldBe wordFrequency
+      val frequency = WordFrequencyCounter.wordFrequencyIn(filename, stopWords)
+      println("==>")
+      frequency.toSeq.map(a => {
+        println(s"${a._1} <=> ${a._2}")
+        a
+      })
+      frequency shouldBe wordFrequency
+      println("<==")
     }
   }
 
