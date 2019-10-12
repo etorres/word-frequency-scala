@@ -24,32 +24,32 @@ class WordFrequencyCounterAcceptance extends FlatSpec with Matchers with TableDr
       "wild" -> 1,
       "lions" -> 1,
       "africa" -> 1)),
-    ("pride-and-prejudice.txt", Map(
-      "mr" -> 786,
-      "elizabeth" -> 635,
-      "very" -> 488,
-      "darcy" -> 418,
-      "such" -> 395,
-      "mrs" -> 343,
-      "much" -> 329,
-      "more" -> 327,
-      "bennet" -> 323,
-      "bingley" -> 306,
-      "jane" -> 295,
-      "miss" -> 283,
-      "one" -> 275,
-      "know" -> 239,
-      "before" -> 229,
-      "herself" -> 227,
-      "though" -> 226,
-      "well" -> 224,
-      "never" -> 220,
-      "sister" -> 218,
-      "soon" -> 216,
-      "think" -> 211,
-      "now" -> 209,
-      "good" -> 201,
-      "time" -> 203))
+    ("the-fall-of-the-house-of-usher.txt", Map(
+      "door" -> 12,
+      "before" -> 11,
+      "certain" -> 12,
+      "now" -> 21,
+      "long" -> 23,
+      "through" -> 15,
+      "over" -> 15,
+      "character" -> 12,
+      "words" -> 10,
+      "more" -> 23,
+      "one" -> 15,
+      "wild" -> 10,
+      "portion" -> 11,
+      "within" -> 11,
+      "well" -> 10,
+      "upon" -> 58,
+      "usher" -> 25,
+      "house" -> 18,
+      "even" -> 11,
+      "thus" -> 14,
+      "shall" -> 9,
+      "family" -> 9,
+      "many" -> 13,
+      "very" -> 12,
+      "having" -> 12))
   )
 
   private val pathToStopWords: FileName => FilePath = {
@@ -70,14 +70,7 @@ class WordFrequencyCounterAcceptance extends FlatSpec with Matchers with TableDr
 
   "Word frequency counter" should "find the top 25 most used words in a file" in {
     forAll(words) { (filename, wordFrequency) =>
-      val frequency = WordFrequencyCounter.wordFrequencyIn(filename, stopWords)
-      println("==>")
-      frequency.toSeq.map(a => {
-        println(s"${a._1} <=> ${a._2}")
-        a
-      })
-      frequency shouldBe wordFrequency
-      println("<==")
+      WordFrequencyCounter.wordFrequencyIn(filename, stopWords) shouldBe wordFrequency
     }
   }
 

@@ -18,7 +18,7 @@ object WordFrequencyCounter {
 
   type WordFrequency = Map[String, Int]
 
-  private val charactersPattern: Regex = "[\",;.!?(\\-]".r
+  private val specialCharactersPattern: Regex = "[\",;.!?(\\-]".r
 
   val pathTo: FileName => FilePath = (fileName: FileName) => Try(getClass.getClassLoader.getResource(fileName).getPath) match {
     case Success(resourceUri) => resourceUri.asInstanceOf[FilePath]
@@ -31,7 +31,7 @@ object WordFrequencyCounter {
   }
 
   val wordsFrom: Lines => Words = {
-    _.map(charactersPattern.replaceAllIn(_, " "))
+    _.map(specialCharactersPattern.replaceAllIn(_, " "))
       .flatMap(_.split("\\s+"))
       .map(_.trim.toLowerCase())
       .filter(_.nonEmpty)
